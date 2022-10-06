@@ -70,13 +70,21 @@ function randomNumberInterval (timeInterval) {
 class Dino {
     constructor(x, y, size, color) {
         this.x = x;
-        this.y = y;
+        this.y = y - 30;
         this.size = size;
         this.color = color;
 
         this.jumpHeight = 12;
         this.shouldJump = false;
         this.jumpCounter = 0;
+
+        const image = new Image();
+        image.src = './img/dino.png';
+        image.onload = () => {
+            this.image = image;
+            this.width = 70;
+            this.height = 80 ;
+        }
     }
 
     jump() {
@@ -99,9 +107,19 @@ class Dino {
     }
 
     draw() {
-        this.jump();
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.size, this.size);
+        // this.jump();
+        // ctx.fillStyle = this.color;
+        // ctx.fillRect(this.x, this.y, this.size, this.size);
+        ctx.save();
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        ctx.restore();
+    }
+
+    update() {
+        if (this.image) {
+            this.jump();
+            this.draw();
+        }
     }
 }
 
@@ -110,15 +128,26 @@ let player = new Dino(150, 350, 50, "black");
 class Cactus {
     constructor(size, speed) {
         this.x = canvas.width + size;
-        this.y = 400 - size;
+        this.y = 390 - size;
         this.size = size;
         this.color = "red";
         this.slideSpeed = speed;
+
+        const image = new Image();
+        image.src = './img/cactus.png';
+        image.onload = () => {
+            this.image = image;
+            this.width = 50;
+            this.height = 60 ;
+        }
     }
 
     draw() {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.size, this.size);
+        // ctx.fillStyle = this.color;
+        // ctx.fillRect(this.x, this.y, this.size, this.size);
+        ctx.save();
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        ctx.restore(); 
     }
 
     slide() {
@@ -185,7 +214,7 @@ function animate() {
     drawBackgroundLine();
     drawScore();
     //Foreground
-    player.draw();
+    player.update();
 
     //Check to see if game speed should be increased
     shouldIncreaseSpeed();
